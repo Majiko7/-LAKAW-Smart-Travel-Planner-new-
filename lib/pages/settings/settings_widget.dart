@@ -36,8 +36,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     _model.textController2 ??= TextEditingController();
     _model.textFieldFocusNode2 ??= FocusNode();
 
-    _model.switchValue1 = true;
-    _model.switchValue2 = true;
     WidgetsBinding.instance.addPostFrameCallback((_) => safeSetState(() {}));
   }
 
@@ -368,125 +366,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         ),
                       ),
                     ),
-                    Material(
-                      color: Colors.transparent,
-                      elevation: 2.0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width * 1.0,
-                        decoration: BoxDecoration(
-                          color:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 20.0, 20.0, 20.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Notifications',
-                                style: FlutterFlowTheme.of(context)
-                                    .headlineSmall
-                                    .override(
-                                      fontFamily: FlutterFlowTheme.of(context)
-                                          .headlineSmallFamily,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                      useGoogleFonts: GoogleFonts.asMap()
-                                          .containsKey(
-                                              FlutterFlowTheme.of(context)
-                                                  .headlineSmallFamily),
-                                    ),
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Push Notifications',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyLargeFamily),
-                                        ),
-                                  ),
-                                  Switch(
-                                    value: _model.switchValue1!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(() =>
-                                          _model.switchValue1 = newValue);
-                                    },
-                                    activeColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                    inactiveThumbColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Email Notifications',
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyLarge
-                                        .override(
-                                          fontFamily:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyLargeFamily,
-                                          letterSpacing: 0.0,
-                                          useGoogleFonts: GoogleFonts.asMap()
-                                              .containsKey(
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyLargeFamily),
-                                        ),
-                                  ),
-                                  Switch(
-                                    value: _model.switchValue2!,
-                                    onChanged: (newValue) async {
-                                      safeSetState(() =>
-                                          _model.switchValue2 = newValue);
-                                    },
-                                    activeColor: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    activeTrackColor:
-                                        FlutterFlowTheme.of(context).secondary,
-                                    inactiveTrackColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                    inactiveThumbColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                  ),
-                                ],
-                              ),
-                            ].divide(SizedBox(height: 16.0)),
-                          ),
-                        ),
-                      ),
-                    ),
                     FFButtonWidget(
                       onPressed: () async {
                         await UsersTable().update(
@@ -554,7 +433,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         borderRadius: BorderRadius.circular(28.0),
                       ),
                     ),
-                  ].divide(SizedBox(height: 24.0)),
+                  ]
+                      .divide(SizedBox(height: 24.0))
+                      .addToEnd(SizedBox(height: 70.0)),
                 ),
               ),
             ],

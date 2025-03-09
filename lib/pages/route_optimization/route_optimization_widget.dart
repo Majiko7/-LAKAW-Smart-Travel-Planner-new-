@@ -459,6 +459,9 @@ class _RouteOptimizationWidgetState extends State<RouteOptimizationWidget> {
                                               valueOrDefault<String>(
                                                 listViewDestinationsRow.name,
                                                 'Destination Name',
+                                              ).maybeHandleOverflow(
+                                                maxChars: 23,
+                                                replacement: '…',
                                               ),
                                               style:
                                                   FlutterFlowTheme.of(context)
@@ -594,6 +597,8 @@ class _RouteOptimizationWidgetState extends State<RouteOptimizationWidget> {
                                     .toList()
                                     .cast<dynamic>();
                                 safeSetState(() {});
+                                FFAppState().showRoutePolyline = true;
+                                safeSetState(() {});
                                 _model.forceRefresh = true;
                                 safeSetState(() {});
                                 await Future.delayed(
@@ -725,6 +730,7 @@ class _RouteOptimizationWidgetState extends State<RouteOptimizationWidget> {
                                     selectedLatitude: _model.selectedLatitude,
                                     selectedLongitude: _model.selectedLongitude,
                                     routePolyline: _model.routePolyline,
+                                    showRoute: FFAppState().showRoutePolyline,
                                   ),
                                 ),
                               ),

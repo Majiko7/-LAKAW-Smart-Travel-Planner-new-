@@ -116,6 +116,8 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                                   ),
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         mainAxisSize: MainAxisSize.max,
@@ -182,6 +184,12 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                                           ),
                                         ].divide(SizedBox(height: 3.0)),
                                       ),
+                                      Icon(
+                                        Icons.bookmark_border,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        size: 45.0,
+                                      ),
                                     ],
                                   ),
                                 ],
@@ -208,43 +216,40 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      valueOrDefault<String>(
-                                        widget.title,
-                                        '[title]',
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .headlineMedium
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .headlineMediumFamily,
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.bold,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .headlineMediumFamily),
-                                          ),
+                            Container(
+                              width: MediaQuery.sizeOf(context).width * 1.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.0),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    valueOrDefault<String>(
+                                      widget.title,
+                                      '[title]',
                                     ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.bookmark_border,
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  size: 45.0,
-                                ),
-                              ],
+                                    textAlign: TextAlign.start,
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMediumFamily,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondary,
+                                          fontSize: 28.0,
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.bold,
+                                          useGoogleFonts: GoogleFonts.asMap()
+                                              .containsKey(
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMediumFamily),
+                                        ),
+                                  ),
+                                ].divide(SizedBox(height: 16.0)),
+                              ),
                             ),
                             Container(
                               width: MediaQuery.sizeOf(context).width * 1.0,
@@ -296,6 +301,7 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                                     16.0, 16.0, 16.0, 16.0),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       'Travel Guide',
@@ -317,32 +323,29 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                                     Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              valueOrDefault<String>(
-                                                widget.content,
-                                                '[content]',
+                                        Text(
+                                          valueOrDefault<String>(
+                                            widget.content,
+                                            '[content]',
+                                          ),
+                                          textAlign: TextAlign.start,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                fontFamily:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMediumFamily,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                                letterSpacing: 0.0,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .bodyMediumFamily),
                                               ),
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMediumFamily,
-                                                        letterSpacing: 0.0,
-                                                        useGoogleFonts: GoogleFonts
-                                                                .asMap()
-                                                            .containsKey(
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMediumFamily),
-                                                      ),
-                                            ),
-                                          ].divide(SizedBox(width: 12.0)),
                                         ),
                                       ].divide(SizedBox(height: 8.0)),
                                     ),
@@ -350,7 +353,9 @@ class _TravelGuideWidgetState extends State<TravelGuideWidget> {
                                 ),
                               ),
                             ),
-                          ].divide(SizedBox(height: 24.0)),
+                          ]
+                              .divide(SizedBox(height: 24.0))
+                              .addToEnd(SizedBox(height: 70.0)),
                         ),
                       ),
                     ),

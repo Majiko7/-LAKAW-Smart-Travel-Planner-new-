@@ -175,16 +175,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: DestinationsWidget.routeName,
-          path: DestinationsWidget.routePath,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Destinations')
-              : NavBarPage(
-                  initialPage: 'Destinations',
-                  page: DestinationsWidget(),
-                ),
-        ),
-        FFRoute(
           name: SavedItineraryWidget.routeName,
           path: SavedItineraryWidget.routePath,
           builder: (context, params) => params.isEmpty
@@ -207,30 +197,46 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: TravelGuideWidget.routeName,
           path: TravelGuideWidget.routePath,
-          builder: (context, params) => TravelGuideWidget(
-            title: params.getParam(
-              'title',
-              ParamType.String,
-            ),
-            description: params.getParam(
-              'description',
-              ParamType.String,
-            ),
-            content: params.getParam(
-              'content',
-              ParamType.String,
+          builder: (context, params) => NavBarPage(
+            initialPage: '',
+            page: TravelGuideWidget(
+              title: params.getParam(
+                'title',
+                ParamType.String,
+              ),
+              description: params.getParam(
+                'description',
+                ParamType.String,
+              ),
+              content: params.getParam(
+                'content',
+                ParamType.String,
+              ),
             ),
           ),
         ),
         FFRoute(
           name: DestinationCategoryWidget.routeName,
           path: DestinationCategoryWidget.routePath,
-          builder: (context, params) => DestinationCategoryWidget(
-            category: params.getParam(
-              'category',
-              ParamType.String,
+          builder: (context, params) => NavBarPage(
+            initialPage: '',
+            page: DestinationCategoryWidget(
+              category: params.getParam(
+                'category',
+                ParamType.String,
+              ),
             ),
           ),
+        ),
+        FFRoute(
+          name: DestinationsWidget.routeName,
+          path: DestinationsWidget.routePath,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Destinations')
+              : NavBarPage(
+                  initialPage: 'Destinations',
+                  page: DestinationsWidget(),
+                ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

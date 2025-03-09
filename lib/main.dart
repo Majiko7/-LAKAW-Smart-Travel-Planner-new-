@@ -156,7 +156,7 @@ class _NavBarPageState extends State<NavBarPage> {
         borderRadius: 8.0,
         itemBorderRadius: 8.0,
         margin: EdgeInsets.all(10.0),
-        padding: EdgeInsets.all(0.0),
+        padding: EdgeInsets.all(10.0),
         width: double.infinity,
         elevation: 0.0,
         items: [
@@ -171,16 +171,6 @@ class _NavBarPageState extends State<NavBarPage> {
                       : FlutterFlowTheme.of(context).secondaryBackground,
                   size: currentIndex == 0 ? 24.0 : 24.0,
                 ),
-                Text(
-                  'Home',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 0
-                        ? FlutterFlowTheme.of(context).secondaryBackground
-                        : FlutterFlowTheme.of(context).secondaryBackground,
-                    fontSize: 11.0,
-                  ),
-                ),
               ],
             ),
           ),
@@ -189,21 +179,11 @@ class _NavBarPageState extends State<NavBarPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  currentIndex == 1 ? Icons.map_sharp : Icons.map_outlined,
+                  currentIndex == 1 ? Icons.map_rounded : Icons.map_outlined,
                   color: currentIndex == 1
                       ? FlutterFlowTheme.of(context).secondaryBackground
                       : FlutterFlowTheme.of(context).secondaryBackground,
                   size: currentIndex == 1 ? 24.0 : 24.0,
-                ),
-                Text(
-                  'Destinations',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 1
-                        ? FlutterFlowTheme.of(context).secondaryBackground
-                        : FlutterFlowTheme.of(context).secondaryBackground,
-                    fontSize: 11.0,
-                  ),
                 ),
               ],
             ),
@@ -221,16 +201,6 @@ class _NavBarPageState extends State<NavBarPage> {
                       : FlutterFlowTheme.of(context).secondaryBackground,
                   size: currentIndex == 2 ? 24.0 : 24.0,
                 ),
-                Text(
-                  'Add',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 2
-                        ? FlutterFlowTheme.of(context).secondaryBackground
-                        : FlutterFlowTheme.of(context).secondaryBackground,
-                    fontSize: 11.0,
-                  ),
-                ),
               ],
             ),
           ),
@@ -247,16 +217,6 @@ class _NavBarPageState extends State<NavBarPage> {
                       : FlutterFlowTheme.of(context).secondaryBackground,
                   size: currentIndex == 3 ? 24.0 : 24.0,
                 ),
-                Text(
-                  'Itineraries',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 3
-                        ? FlutterFlowTheme.of(context).secondaryBackground
-                        : FlutterFlowTheme.of(context).secondaryBackground,
-                    fontSize: 11.0,
-                  ),
-                ),
               ],
             ),
           ),
@@ -272,16 +232,6 @@ class _NavBarPageState extends State<NavBarPage> {
                       ? FlutterFlowTheme.of(context).secondaryBackground
                       : FlutterFlowTheme.of(context).secondaryBackground,
                   size: currentIndex == 4 ? 24.0 : 24.0,
-                ),
-                Text(
-                  'Settings',
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: currentIndex == 4
-                        ? FlutterFlowTheme.of(context).secondaryBackground
-                        : FlutterFlowTheme.of(context).secondaryBackground,
-                    fontSize: 11.0,
-                  ),
                 ),
               ],
             ),

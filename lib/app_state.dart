@@ -78,4 +78,11 @@ class FFAppState extends ChangeNotifier {
   set isListVisibleROpt(bool value) {
     _isListVisibleROpt = value;
   }
+
+  /// displays the polylines of the route
+  bool _showRoutePolyline = false;
+  bool get showRoutePolyline => _showRoutePolyline;
+  set showRoutePolyline(bool value) {
+    _showRoutePolyline = value;
+  }
 }

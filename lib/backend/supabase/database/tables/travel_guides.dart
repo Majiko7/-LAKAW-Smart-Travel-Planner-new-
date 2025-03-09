@@ -28,4 +28,7 @@ class TravelGuidesRow extends SupabaseDataRow {
 
   String? get icon => getField<String>('icon');
   set icon(String? value) => setField<String>('icon', value);
+
+  String? get display => getField<String>('display');
+  set display(String? value) => setField<String>('display', value);
 }

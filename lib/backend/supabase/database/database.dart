@@ -10,3 +10,4 @@ export 'tables/users1.dart';
 export 'tables/travel_guides.dart';
 export 'tables/users.dart';
 export 'tables/itineraries.dart';
+export 'tables/categories.dart';

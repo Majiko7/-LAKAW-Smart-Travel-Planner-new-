@@ -226,6 +226,8 @@ dynamic deserializeParam<T>(
             return UsersRow(data);
           case ItinerariesRow:
             return ItinerariesRow(data);
+          case CategoriesRow:
+            return CategoriesRow(data);
           default:
             return null;
         }

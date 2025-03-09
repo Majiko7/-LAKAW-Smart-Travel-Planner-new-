@@ -27,7 +27,8 @@ class DynamicMapbox extends StatefulWidget {
     this.currentLocation,
     required this.selectedLatitude,
     required this.selectedLongitude,
-    this.routePolyline,
+    required this.routePolyline,
+    required this.showRoute, // ✅ Ensures polyline appears only when "Calculate Route" is clicked
   });
 
   final double? width;
@@ -39,6 +40,7 @@ class DynamicMapbox extends StatefulWidget {
   final List<double> selectedLatitude;
   final List<double> selectedLongitude;
   final List<dynamic>? routePolyline;
+  final bool showRoute; // ✅ Determines when to show polylines
 
   @override
   State<DynamicMapbox> createState() => _DynamicMapboxWidgetState();
@@ -49,7 +51,6 @@ class _DynamicMapboxWidgetState extends State<DynamicMapbox> {
   List<Polyline> routePolylines = [];
   late MapController mapController;
   final polylinePoints = PolylinePoints(); // For decoding polyline
-  List<LatLng> destinationsLatLng = [];
 
   @override
   void initState() {
@@ -58,58 +59,67 @@ class _DynamicMapboxWidgetState extends State<DynamicMapbox> {
     refreshMapElements();
   }
 
-  // Step 1: Get directions from Mapbox API and decode polyline for actual route
-  Future<void> _getRouteFromMapbox(List<LatLng> orderedDestinations) async {
-    // Start with the starting point
-    String url =
-        "https://api.mapbox.com/directions/v5/mapbox/driving/${widget.startingPoint!.longitude},${widget.startingPoint!.latitude}"; // starting point coordinates
-
-    // Add each ordered destination to the URL
-    for (int i = 0; i < orderedDestinations.length; i++) {
-      url +=
-          ";${orderedDestinations[i].longitude},${orderedDestinations[i].latitude}";
+  /// ✅ Fix: Get proper road routes from Mapbox API
+  Future<void> _getRouteFromMapbox() async {
+    if (widget.startingPoint == null || widget.selectedLatitude.isEmpty) {
+      print("⚠️ No starting point or destinations selected.");
+      return;
     }
 
-    url +=
-        "?access_token=${widget.accessToken}&geometries=polyline&overview=full"; // Detailed route geometry
+    print("🛣️ Fetching route from Mapbox...");
 
-    // Send HTTP request to Mapbox Directions API
-    final response = await http.get(Uri.parse(url));
+    // Build the Mapbox API request URL
+    String baseUrl = "https://api.mapbox.com/directions/v5/mapbox/driving/";
+    String coordinates =
+        "${widget.startingPoint!.longitude},${widget.startingPoint!.latitude}";
 
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      final List<dynamic> routes = data['routes'];
-      final routeGeometry =
-          routes[0]['geometry']; // Get the geometry of the first route
+    for (int i = 0; i < widget.selectedLatitude.length; i++) {
+      coordinates +=
+          ";${widget.selectedLongitude[i]},${widget.selectedLatitude[i]}";
+    }
 
-      // Step 2: Decode the polyline from the geometry data
-      final result = polylinePoints.decodePolyline(routeGeometry);
-      List<ll.LatLng> polylinePointsList = result
-          .map((point) => ll.LatLng(point.latitude, point.longitude))
-          .toList();
+    String url =
+        "$baseUrl$coordinates?geometries=polyline&overview=full&access_token=${widget.accessToken}";
 
-      // Step 3: Update the route polylines with decoded points
-      setState(() {
-        routePolylines = [
-          Polyline(
-            points: polylinePointsList,
-            strokeWidth: 4.0,
-            color: Colors.blue, // Set color for the route polyline
-          )
-        ];
-      });
-    } else {
-      print("Error fetching directions: ${response.statusCode}");
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<dynamic> routes = data['routes'];
+        final routeGeometry = routes[0]['geometry']; // ✅ Extract route geometry
+
+        // Decode the polyline data
+        final result = polylinePoints.decodePolyline(routeGeometry);
+        List<ll.LatLng> polylinePointsList = result
+            .map((point) => ll.LatLng(point.latitude, point.longitude))
+            .toList();
+
+        setState(() {
+          routePolylines = [
+            Polyline(
+              points: polylinePointsList,
+              strokeWidth: 4.0,
+              color: Colors.blue, // ✅ Polyline is BLUE
+            )
+          ];
+        });
+
+        print("✅ Route successfully generated!");
+      } else {
+        print("❌ Error fetching directions: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("❌ Exception while fetching route: $e");
     }
   }
 
-  // Step 4: Refresh markers and polylines for the map
   void refreshMapElements() {
     print("🔥 Refreshing map elements...");
 
     List<Marker> markers = [];
 
-    // Add BLUE marker for current location
+    // ✅ Add BLUE marker for current location
     if (widget.currentLocation != null) {
       markers.add(
         Marker(
@@ -124,66 +134,37 @@ class _DynamicMapboxWidgetState extends State<DynamicMapbox> {
       );
     }
 
-    // Add RED markers for selected destinations
-    destinationsLatLng.clear();
+    // ✅ Add RED markers for selected destinations
     for (int i = 0; i < widget.selectedLatitude.length; i++) {
-      double lat = widget.selectedLatitude[i];
-      double lon = widget.selectedLongitude[i];
-
-      if (lat.isFinite && lon.isFinite) {
-        markers.add(
-          Marker(
-            point: ll.LatLng(lat, lon),
-            width: 30,
-            height: 30,
-            child: const Icon(Icons.location_pin, color: Colors.red, size: 30),
-          ),
-        );
-        destinationsLatLng.add(LatLng(lat, lon)); // Save as LatLng
-      }
+      markers.add(
+        Marker(
+          point: ll.LatLng(
+              widget.selectedLatitude[i], widget.selectedLongitude[i]),
+          width: 30,
+          height: 30,
+          child: const Icon(Icons.location_pin, color: Colors.red, size: 30),
+        ),
+      );
     }
 
-    // Step 5: Sorting destinations by distance from the starting point
-    List<LatLng> orderedDestinations =
-        _sortDestinationsByDistance(destinationsLatLng);
-
-    // Call the Mapbox API to get the route
-    _getRouteFromMapbox(orderedDestinations);
+    // ✅ Only fetch and show the route when "Calculate Route" is clicked
+    if (widget.showRoute) {
+      _getRouteFromMapbox(); // ✅ Fetch road routes
+    } else {
+      print("⚠️ Route is NOT being displayed yet.");
+    }
 
     setState(() {
       allMarkers = markers;
     });
   }
 
-  // Sort destinations based on distance from starting point
-  List<LatLng> _sortDestinationsByDistance(List<LatLng> destinations) {
-    destinations.sort((a, b) {
-      double distanceA = _calculateDistance(widget.startingPoint!, a);
-      double distanceB = _calculateDistance(widget.startingPoint!, b);
-      return distanceA.compareTo(distanceB);
-    });
-    return destinations;
-  }
-
-// Calculate the distance between two LatLng points (in kilometers)
-  double _calculateDistance(LatLng start, LatLng end) {
-    final startLatLng = ll.LatLng(start.latitude, start.longitude);
-    final endLatLng = ll.LatLng(end.latitude, end.longitude);
-
-    // Use the distance method to calculate the distance in meters
-    double distanceInMeters = ll.Distance().distance(startLatLng, endLatLng);
-
-    // Convert distance from meters to kilometers
-    return distanceInMeters / 1000;
-  }
-
   @override
   void didUpdateWidget(covariant DynamicMapbox oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedLatitude != oldWidget.selectedLatitude ||
-        widget.selectedLongitude != oldWidget.selectedLongitude ||
+    if (widget.showRoute != oldWidget.showRoute ||
         widget.routePolyline != oldWidget.routePolyline) {
-      print("🔄 Widget Updated! Refreshing Map...");
+      print("🔄 Route Updated! Refreshing...");
       refreshMapElements();
     }
   }
@@ -213,11 +194,13 @@ class _DynamicMapboxWidgetState extends State<DynamicMapbox> {
               'accessToken': widget.accessToken,
             },
           ),
-          PolylineLayer(
-            polylines: routePolylines, // Display the updated route
-          ),
+          if (widget
+              .showRoute) // ✅ Only show route if "Calculate Route" was clicked
+            PolylineLayer(
+              polylines: routePolylines,
+            ),
           MarkerLayer(
-            markers: allMarkers, // Display all markers (blue, red)
+            markers: allMarkers,
           ),
         ],
       ),
